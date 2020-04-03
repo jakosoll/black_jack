@@ -81,27 +81,31 @@ class Chips:
         self.total = 200  # кол-во фишек в начале игры
         self.bet = 0  # ставка
 
-    def win_bet(self, bet):
-        self.total += bet
+    def win_bet(self):
+        self.total += self.bet
 
-    def lose_bet(self, bet):
-        self.total -= bet
+    def lose_bet(self):
+        self.total -= self.bet
 
 
-def take_bet():
+def take_bet(chips):
+    """
+    Incoming arg - from Chips class.
+    Func ask player about his bet.
+    Func have no return value.
+    """
     while True:
         try:
             print(f'Your have {player_chips.total}$')
-            bet = int(input('Enter your bet: '))
-            if bet > player_chips.total:
-                raise KeyError
+            chips.bet = int(input('Enter your bet: '))
         except ValueError:
             print('Please, enter your bet by numbers')
-        except KeyError:
-            print('Your bet bigger than you have')
+
         else:
-            break
-    return bet
+            if chips.bet > player_chips.total:
+                print('Your bet bigger than you have')
+            else:
+                break
 
 
 def hit(deck, hand):
@@ -165,9 +169,9 @@ while score:
     main_deck = Deck()
     main_deck.shuffle()
     time.sleep(1)
-    player_bet = take_bet()  # take player's bet
+    take_bet(player_chips)  # take player's bet
     time.sleep(1)
-    print(f'Your bet is {player_bet}$')
+    print(f'Your bet is {player_chips.bet}$')
     player_hand = Hand()  # create player's Hand
     dealer_hand = Hand()  # create dealer's Hand
     print_hand(hit(main_deck, dealer_hand))
@@ -179,7 +183,7 @@ while score:
     if 21 < player_hand.calculate_value():
         print('Player lose!')
         time.sleep(1)
-        player_chips.lose_bet(player_bet)
+        player_chips.lose_bet()
         print(f'Player`s score: {player_chips.total}')
         if ask('Wanna play more?'):
             continue
@@ -189,7 +193,7 @@ while score:
     elif player_hand.calculate_value() == 21:
         print('Black Jack! You win!')
         time.sleep(1)
-        player_chips.win_bet(player_bet)
+        player_chips.win_bet()
         print(f'Player`s score: {player_chips.total}')
         if ask('Wanna play more?'):
             continue
@@ -201,7 +205,7 @@ while score:
     if 21 > dealer_hand.calculate_value() > player_hand.calculate_value():
         print('Player lose! Dealer Win!')
         time.sleep(1)
-        player_chips.lose_bet(player_bet)
+        player_chips.lose_bet()
         print(f'Player`s score: {player_chips.total}')
         if ask('Wanna play more?'):
             continue
@@ -211,7 +215,7 @@ while score:
     elif dealer_hand.calculate_value() == 21:
         print('Black Jack! Dealer win!')
         time.sleep(1)
-        player_chips.win_bet(player_bet)
+        player_chips.win_bet()
         print(f'Player`s score: {player_chips.total}')
         if ask('Wanna play more?'):
             continue
@@ -221,7 +225,7 @@ while score:
     else:
         print('Player win!')
         time.sleep(1)
-        player_chips.win_bet(player_bet)
+        player_chips.win_bet()
         print(f'Player`s score: {player_chips.total}')
         if ask('Wanna play more?'):
             continue
