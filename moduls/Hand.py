@@ -8,12 +8,18 @@ class Hand:
     VALUES = {**{str(a): a for a in range(2, 10)}, **{'J': 10, 'Q': 10, 'K': 10, 'A': 11}}
 
     def __init__(self, cards: list):
-        self.cards = cards  # empty list for cards
+        self.cards: list = cards  # empty list for cards
+        self._pass: bool = False
         self.value = 0  # value of cards
         self.aces = 0  # add attribute for aces
 
     def add_card(self, card):
-        self.cards.append(card)
+        self._pass = self._is_player_pass()
+        if not self._pass:
+            self.cards.append(card)
+
+    def _is_player_pass(self):
+        pass
 
     def calculate_value(self):
         self.value = 0
@@ -32,25 +38,19 @@ class Hand:
         pass
 
     def __repr__(self):
-        return ', '.join(str(item) for item in self.cards)
+        pass
 
     def hit(self):
         pass
 
 
 class PlayerHand(Hand):
-    def __init__(self, cards: list):
-        super().__init__(cards)
-        self._pass: bool = False
 
     def add_card(self, card):
-        self._pass = self._is_player_pass()
-        if not self._pass:
-            self.cards.append(card)
-            print(f'Player got {card.rank} of {card.suit}')
+        super().add_card(card)
+        print(f'Player got {card.rank} of {card.suit}')
 
-    @staticmethod
-    def _is_player_pass():
+    def _is_player_pass(self):
         while True:
             time.sleep(1)
             answer = input(f'Do you want to take another card? (Y/N): ').lower()
@@ -65,5 +65,8 @@ class PlayerHand(Hand):
 class DealerHand(Hand):
 
     def add_card(self, card):
-        self.cards.append(card)
-        print(f'Dealer got {card}')
+        super().add_card(card)
+        print(f'Dealer got {card.rank} of {card.suit}')
+
+    def _is_player_pass(self):
+        return self.calculate_value() < 17

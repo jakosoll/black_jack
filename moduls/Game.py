@@ -3,6 +3,15 @@ from moduls.Deck import Deck
 from moduls.Hand import PlayerHand, DealerHand
 
 
+class WinChecker:
+    """Проверяет оба объекта, выиграл ли кто-то из них"""
+    def __init__(self, players):
+        self._players = players
+
+    def check_winner(self):
+        pass
+
+
 class Round:
     def __init__(self, deck):
         self._deck = deck
