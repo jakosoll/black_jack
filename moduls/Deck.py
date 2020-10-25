@@ -16,9 +16,10 @@ class Deck:
         self._cards = [Card(rank, suit) for rank in self.RANKS
                        for suit in self.SUITS]
 
-    def deal_card(self):
-        card = self._cards.pop(random.randrange(0, len(self._cards)))
-        return f"{card.rank} of {card.suit.title()}"
+    def deal(self, amount: int = 1):
+        if amount > 1:
+            return [self._cards.pop(random.randrange(0, len(self._cards))) for _ in range(amount)]
+        return [self._cards.pop(random.randrange(0, len(self._cards)))]
 
     def __repr__(self):
         return '\n'.join(str(item) for item in self._cards)
