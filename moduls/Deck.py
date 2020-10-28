@@ -19,7 +19,8 @@ class Deck:
     def deal(self, amount: int = 1):
         if amount > 1:
             return [self._cards.pop(random.randrange(0, len(self._cards))) for _ in range(amount)]
-        return [self._cards.pop(random.randrange(0, len(self._cards)))]
+        else:
+            return self._cards.pop(random.randrange(0, len(self._cards)))
 
     def __repr__(self):
         return '\n'.join(str(item) for item in self._cards)

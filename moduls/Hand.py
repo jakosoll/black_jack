@@ -1,4 +1,5 @@
 import time
+from Deck import Card
 
 
 class Hand:
@@ -14,7 +15,7 @@ class Hand:
         self.aces = 0  # add attribute for aces
 
     def add_card(self, card):
-        self._pass = self._is_player_pass()
+        
         if not self._pass:
             self.cards.append(card)
 
@@ -43,12 +44,17 @@ class Hand:
     def hit(self):
         pass
 
+    def __len__(self):
+        return len(self.cards)
+
 
 class PlayerHand(Hand):
 
-    def add_card(self, card):
+    def add_card(self, card: Card):
+        self._pass = self._is_player_pass()
         super().add_card(card)
-        print(f'Player got {card.rank} of {card.suit}')
+        # print(card)
+        print(f'Player got {card.rank} of {card.suit.title()}')
 
     def _is_player_pass(self):
         while True:
@@ -65,8 +71,10 @@ class PlayerHand(Hand):
 class DealerHand(Hand):
 
     def add_card(self, card):
+        self._pass = self._is_player_pass()
         super().add_card(card)
-        print(f'Dealer got {card.rank} of {card.suit}')
+        
+        print(f'Dealer got {card.rank} of {card.suit.title()}')
 
     def _is_player_pass(self):
         return self.calculate_value() < 17
