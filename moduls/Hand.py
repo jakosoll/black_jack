@@ -1,48 +1,82 @@
 import time
 from Deck import Card
+from abc import ABC, abstractmethod
+from typing import List
 
 
-class Hand:
+class Observer(ABC):
+    """
+    interface observer declare update method for Publishers using for notice his subscribers
+    """
+
+    @abstractmethod
+    def update(self, publisher):
+        pass
+
+
+class Publisher(ABC):
+    """
+    Publisher inteface declare any methods for obey subscribers
+    """
+    @abstractmethod
+    def attach(self, observer: Observer) -> None:
+        """Attach observer to publisher"""
+        pass
+
+    @abstractmethod
+    def detach(self, observer: Observer) -> None:
+        """Detach observer to publisher"""
+        pass
+
+    @abstractmethod
+    def notify(self) -> None:
+        """Notice subscribers"""
+        pass
+
+
+class Hand(Publisher):
     """
     This class create player's hand with cards
     """
     VALUES = {**{str(a): a for a in range(2, 10)}, **{'J': 10, 'Q': 10, 'K': 10, 'A': 11}}
 
-    def __init__(self, cards: list):
+    _observers: List[Observer] = []
+    _pass: bool = False
+    _value: int = 0
+
+    def __init__(self, cards: List[Card]):
         self.cards: list = cards  # empty list for cards
-        self._pass: bool = False
-        self.value = 0  # value of cards
-        self.aces = 0  # add attribute for aces
 
-    def add_card(self, card):
-        
-        if not self._pass:
-            self.cards.append(card)
+    def add_card(self, card: Card):
+        self.cards.append(card)
+        self._calculate_value()
+        self.notify()
 
-    def _is_player_pass(self):
+    def is_need_card(self) -> bool:
         pass
 
-    def calculate_value(self):
-        self.value = 0
-        self.aces = 0
+    def _calculate_value(self) -> None:
+        """Calc value of hand"""
+        value = 0
+        aces = 0
         for card in self.cards:
-            self.value += self.VALUES[card.rank]
+            value += self.VALUES[card.rank]
             if card.rank == 'A':
-                self.aces += 1
-        if self.value > 21:
-            self.value -= self.aces * 10
-        return self.value
+                aces += 1
+        if value > 21:
+            value -= aces * 10
+        self._value = value
 
-    def adjust_for_aces(self):
-        """
-        """
-        pass
+    def attach(self, observer: Observer) -> None:
+        self._observers.append(observer)
 
-    def __repr__(self):
-        pass
+    def detach(self, observer: Observer) -> None:
+        self._observers.remove(observer)
 
-    def hit(self):
-        pass
+    def notify(self) -> None:
+        """Start update in observer list"""
+        for observer in self._observers:
+            observer.update(self)
 
     def __len__(self):
         return len(self.cards)
@@ -50,31 +84,34 @@ class Hand:
 
 class PlayerHand(Hand):
 
-    def add_card(self, card: Card):
-        self._pass = self._is_player_pass()
+    def add_card(self, card):
         super().add_card(card)
         # print(card)
         print(f'Player got {card.rank} of {card.suit.title()}')
 
-    def _is_player_pass(self):
+    def is_need_card(self):
         while True:
             time.sleep(1)
             answer = input(f'Do you want to take another card? (Y/N): ').lower()
             if answer == 'y':
-                return False
-            elif answer == 'n':
                 return True
+            elif answer == 'n':
+                self._pass = True
+                return False
             else:
                 print('Error! Enter "Y" or "N"')
+
+    def __repr__(self):
+        cards = [f'{card.rank} of {card.suit.title()}' for card in self.cards]
+        return " ".join(cards)
 
 
 class DealerHand(Hand):
 
     def add_card(self, card):
-        self._pass = self._is_player_pass()
         super().add_card(card)
-        
         print(f'Dealer got {card.rank} of {card.suit.title()}')
 
-    def _is_player_pass(self):
-        return self.calculate_value() < 17
+    def is_need_card(self):
+        self._pass = self._calculate_value() < 17
+        return self._pass

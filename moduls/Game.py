@@ -22,10 +22,11 @@ class Round:
         self._loser: object = None
         self._player_loose: bool = False
 
-    def deal(self):
+    def deal(self) -> None:
         for player in self._players:
-            player.add_card(self._deck.deal())
-            self._check_player(player)
+            if player.is_need_card():
+                player.add_card(self._deck.deal())
+            
 
     def is_game_going(self):
         return not self._winner or not self._loser
