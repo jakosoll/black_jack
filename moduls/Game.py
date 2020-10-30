@@ -22,6 +22,9 @@ class Round:
         self._loser: object = None
         self._player_loose: bool = False
 
+    def deal_first_hands(self):
+        self._player_hand.add_card(self._deck.deal(2))
+
     def deal(self) -> None:
         for player in self._players:
             if player.is_need_card():
@@ -59,13 +62,24 @@ class Game:
         Main method where called other methods
         """
         self._chips.take_bet()
+
+        """
+        Создаем раунд, при создании печатаются руки игроков
+        """
         game_round = Round(self._deck)
-        continue_round = True
-        while continue_round:
-            game_round.deal()
-            continue_round = game_round.is_game_going()
-        game_round.print_winner()
-        if game_round.is_player_lose():
-            self._chips.lose_bet()
-        else:
-            self._chips.win_bet()
+        if not game_round.is_stop_game():
+            game_round.start_player_deal()  # начинаем раунд игрока
+        
+
+
+
+
+        # continue_round = True
+        # while continue_round:
+        #     game_round.deal()
+        #     continue_round = game_round.is_game_going()
+        # game_round.print_winner()
+        # if game_round.is_player_lose():
+        #     self._chips.lose_bet()
+        # else:
+        #     self._chips.win_bet()

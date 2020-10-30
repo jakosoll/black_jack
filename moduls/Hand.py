@@ -34,6 +34,19 @@ class Publisher(ABC):
         pass
 
 
+class GameObserver(Observer):
+    """
+    Watching for status of player and dealer
+    """
+    looser = None
+    winner = None
+
+    def update(self, subject) -> None:
+        if subject._value > 21:
+            self.looser = subject
+        if subject.
+
+
 class Hand(Publisher):
     """
     This class create player's hand with cards
@@ -103,7 +116,7 @@ class PlayerHand(Hand):
 
     def __repr__(self):
         cards = [f'{card.rank} of {card.suit.title()}' for card in self.cards]
-        return " ".join(cards)
+        return ", ".join(cards)
 
 
 class DealerHand(Hand):

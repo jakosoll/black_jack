@@ -22,7 +22,7 @@ class PlayerHandTest(unittest.TestCase):
         self.assertEqual(len(self.player), 2)
     
     def test_player_repr(self):
-        self.assertEqual(self.player.__repr__(), '2 of Spades J of Diamonds')
+        self.assertEqual(self.player.__repr__(), '2 of Spades, J of Diamonds')
 
     @patch("builtins.input", return_value='Y')
     def test_player_take_extra_cards(self, mock_input):
