@@ -69,6 +69,11 @@ class Game:
         game_round = Round(self._deck)
         if not game_round.is_stop_game():
             game_round.start_player_deal()  # начинаем раунд игрока
+        if not game_round.stop_game():
+            game_round.start_dealer_deal()
+
+        print(f'Game over! {game_round.winner} win!')
+
         
 
 
