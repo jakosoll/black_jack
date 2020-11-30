@@ -1,3 +1,6 @@
+import time
+from colorama import Fore
+
 class Chips:
     """"""
 
@@ -13,20 +16,25 @@ class Chips:
         """
         while True:
             try:
-                print(f'Your have {self.total}$')
+                time.sleep(1)
+                print(Fore.CYAN + f'Your have {self.total}$')
+                time.sleep(1)
                 self.bet = int(input('Enter your bet: '))
             except ValueError:
-                print('Please, enter your bet by numbers')
+                print(Fore.RED + 'Please, enter your bet by numbers' + Fore.RESET)
 
             else:
                 if self.bet > self.total:
-                    print('Your bet bigger than you have')
+                    print(Fore.RED + 'Your bet bigger than you have' + Fore.RESET)
                 else:
                     break
-        print(f'Your bet is {self.bet}')
+        print(Fore.CYAN + f'Your bet is {self.bet}' + Fore.RESET)
 
     def win_bet(self):
         self.total += self.bet
 
     def lose_bet(self):
         self.total -= self.bet
+
+    def __repr__(self):
+        return self.total
