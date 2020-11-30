@@ -8,3 +8,7 @@
 Запустить игру: `python mane_game.py`
 
 В будущем для игры планирую сделать графический интерфейс
+
+Так игра выглядит в консоли:
+
+https://drive.google.com/file/d/1OMPjV6d9N9Yb08HAN9njOX1eZ2AojIvK/view?usp=sharing
