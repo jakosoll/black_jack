@@ -1,6 +1,6 @@
-from moduls.chips import Chips
-from moduls.deck import Deck
-from moduls.hand import PlayerHand, DealerHand
+from modules.chips import Chips
+from modules.deck import Deck
+from modules.hand import PlayerHand, DealerHand
 import time
 from colorama import Fore
 
